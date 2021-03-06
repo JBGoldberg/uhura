@@ -14,9 +14,10 @@ var (
 	userLicense string
 
 	rootCmd = &cobra.Command{
-		Use:   "uhura",
-		Short: "Message users for several different channels",
-		Long:  `Uhura is a CLI that send messages using several different channels. The aim is to reach people the way they feels fit their needs.`,
+		Use:     "uhura",
+		Short:   "Message users for several different channels",
+		Version: "0.0.1",
+		Long:    `Uhura is a CLI that exchanges messages using several different channels. The goal is to reach people the way they feels fit their needs.`,
 	}
 )
 
@@ -28,15 +29,7 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
-	rootCmd.PersistentFlags().StringP("author", "a", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>", "author name for copyright attribution")
-	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
-
-	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
-	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
-	viper.SetDefault("author", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>")
-	viper.SetDefault("license", "CC BY-SA")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.uhura.yaml)")
 
 }
 

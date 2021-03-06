@@ -12,7 +12,7 @@ func init() {
 }
 
 var infoCmd = &cobra.Command{
-	Use:   "info",
+	Use:   "info license|author|codebase",
 	Short: "Retreives informations about Uhura",
 	Long:  `Returns legal and convenience information about Uhura like author, license.`,
 	Args:  cobra.MinimumNArgs(1),
@@ -34,8 +34,7 @@ var infoCmd = &cobra.Command{
 				break
 
 			case "version":
-				fmt.Println("0.0.1")
-				break
+				return errors.New("Try uhura --version")
 
 			default:
 				return errors.New("Requested information is not availiable")
