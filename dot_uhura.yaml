@@ -1,0 +1,9 @@
+
+# Server for send emails via SMTP
+smtp:
+  # SMTP Server Hostname and Service Port
+  server-host: smtp.somewhere.com
+  server-port: 25
+
+  # Canonical client hostname for HELO phase
+  client-host: thispc.somewhere.com

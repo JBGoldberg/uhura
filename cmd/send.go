@@ -5,20 +5,17 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func init() {
 
-	sendCmd.PersistentFlags().StringP("author", "a", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>", "author name for copyright attribution")
-	sendCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
+	// sendCmd.PersistentFlags().StringP("author", "a", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>", "author name for copyright attribution")
 
-	sendCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	viper.BindPFlag("author", sendCmd.PersistentFlags().Lookup("author"))
-	viper.BindPFlag("useViper", sendCmd.PersistentFlags().Lookup("viper"))
-	viper.SetDefault("author", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>")
-	viper.SetDefault("license", "CC BY-SA")
-
+	// sendCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
+	// viper.BindPFlag("author", sendCmd.PersistentFlags().Lookup("author"))
+	// viper.BindPFlag("useViper", sendCmd.PersistentFlags().Lookup("viper"))
+	// viper.SetDefault("author", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>")
+	// viper.SetDefault("license", "CC BY-SA")
 	rootCmd.AddCommand(sendCmd)
 }
 

@@ -1,18 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var (
-	// Used for flags.
-	cfgFile     string
-	userLicense string
-
 	rootCmd = &cobra.Command{
 		Use:     "uhura",
 		Short:   "Message users for several different channels",
@@ -21,35 +13,17 @@ var (
 	}
 )
 
-// Execute executes the root command.
+// Execute the trigger for cobra execution process
 func Execute() error {
 	return rootCmd.Execute()
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.uhura.yaml)")
+	rootCmd.PersistentFlags().StringVar(&config.cfgFile, "config", "", "config file (default is $HOME/.uhura.yaml)")
+	rootCmd.PersistentFlags().String("license", "CC BY-SA", "returns the open source license")
 
-}
+	rootCmd.PersistentFlags().String("codebase", "https://github.com/JBGoldberg/uhura", "returns the source codebase location")
+	rootCmd.PersistentFlags().String("author", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>", "returns the author data")
 
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".cobra" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".cobra")
-	}
-
-	viper.AutomaticEnv()
-
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
 }

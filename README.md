@@ -8,9 +8,9 @@ It accepts commands to several different command to process connections and exch
 
 ## Configuration
 
-*Uhura* can receive configuration data from a file called `.uhura` in the path or through enviroment variables:
+*Uhura* can receive configuration data from a file called `.uhura.yaml` in current path, user home or through enviroment variables.
 
-* DEFAULT_MODE: Defines the default mode for the current run.
+Check the file `dot_uhura.yaml` for examples.
 
 ## Use
 
@@ -18,12 +18,15 @@ It accepts commands to several different command to process connections and exch
 
 You should define a action to be executed. There are 2 diffent possibilites: receive or send messages.
 
-### Modes
+Each action must specify one or several communication channels to use.
 
+### Communication Channels
+
+Channels are any way to exchange messages with users. They can vary from traditional ones like SMTP/POP/Facebook, some more updated as Linkedin/Telegram/Signal or new ones like Unstoppable Chat.
+
+For now, I am working to implement smtp as the first channel available.
 #### SMTP
 
+```bash
+uhura send smtp
 ```
-uhura smtp
-```
-
-* -f EMAIL:  
