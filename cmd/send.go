@@ -15,11 +15,12 @@ func init() {
 var email = models.Email{
 	ID:   "teste-1234",
 	From: "uhura@nekutima.eu",
-	To: []string{
-		"jimbrunogoldberg+email@gmail.com",
-		"jimbrunogoldberg+model@gmail.com",
-		"jimbrunogoldberg+test@gmail.com",
+	To:   "jimbrunogoldberg@gmail.com",
+	Cc: []string{
 		"jim@bycoders.co",
+	},
+	Bcc: []string{
+		"jbgoldberg@nekutima.eu",
 	},
 	Subject: "Test Email From Uhura",
 	Message: "This is a message file from Uhura!",
