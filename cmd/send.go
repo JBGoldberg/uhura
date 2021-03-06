@@ -7,13 +7,13 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(smtpCmd)
+	rootCmd.AddCommand(sendCmd)
 }
 
-var smtpCmd = &cobra.Command{
-	Use:   "smtp",
-	Short: "Send messages using the SMTP server",
-	Long:  `Receive the message data, connect to a SMTP server and send it.`,
+var sendCmd = &cobra.Command{
+	Use:   "send",
+	Short: "Send messages on queue",
+	Long:  `Reads the messages queue to be send and process it.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Println("Processing SMTP queue")
 

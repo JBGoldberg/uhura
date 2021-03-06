@@ -14,6 +14,10 @@ It accepts commands to several different command to process connections and exch
 
 ## Use
 
+### Actions
+
+You should define a action to be executed. There are 2 diffent possibilites: receive or send messages.
+
 ### Modes
 
 #### SMTP
