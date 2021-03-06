@@ -6,11 +6,14 @@ import (
 	"net"
 	"net/smtp"
 
+	"github.com/JBGoldberg/uhura/models"
 	log "github.com/sirupsen/logrus"
 )
 
-func smtpSend() error {
+func sendSMTP(email models.Email) error {
 	log.Printf("Sending message using SMTP server @ %s:%d", config.smtp.serverHost, config.smtp.serverPort)
+
+	log.Printf("Sending message %s from %s, about %s", email.ID, email.From, email.Subject)
 
 	// conn, err := net.Dial("tcp", "workcluster.nekutima.eu:25")
 	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", config.smtp.serverHost, config.smtp.serverPort))
@@ -36,14 +39,11 @@ func smtpSend() error {
 		}
 	}
 
-	if err = c.Mail("oompa@nekutima.eu"); err != nil {
+	if err = c.Mail(email.From); err != nil {
 		return err
 	}
 
-	to := []string{
-		"jimbrunogoldberg@gmail.com",
-	}
-	for _, addr := range to {
+	for _, addr := range email.To {
 		if err = c.Rcpt(addr); err != nil {
 			return err
 		}

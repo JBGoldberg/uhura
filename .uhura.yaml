@@ -1,2 +1,7 @@
 # Default mode to process
-DEFAULT_MODE = smtp
+DEFAULT_MODE: smtp
+
+smtp:
+  server-host: workcluster.nekutima.eu
+  server-port: 25
+  client-host: ip5f5bf741.dynamic.kabel-deutschland.de

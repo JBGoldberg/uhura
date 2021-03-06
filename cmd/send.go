@@ -3,20 +3,26 @@ package cmd
 import (
 	"errors"
 
+	"github.com/JBGoldberg/uhura/models"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 func init() {
-
-	// sendCmd.PersistentFlags().StringP("author", "a", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>", "author name for copyright attribution")
-
-	// sendCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	// viper.BindPFlag("author", sendCmd.PersistentFlags().Lookup("author"))
-	// viper.BindPFlag("useViper", sendCmd.PersistentFlags().Lookup("viper"))
-	// viper.SetDefault("author", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>")
-	// viper.SetDefault("license", "CC BY-SA")
 	rootCmd.AddCommand(sendCmd)
+}
+
+var email = models.Email{
+	ID:   "teste-1234",
+	From: "uhura@nekutima.eu",
+	To: []string{
+		"jimbrunogoldberg+email@gmail.com",
+		"jimbrunogoldberg+model@gmail.com",
+		"jimbrunogoldberg+test@gmail.com",
+		"jim@bycoders.co",
+	},
+	Subject: "Test Email From Uhura",
+	Message: "This is a message file from Uhura!",
 }
 
 var sendCmd = &cobra.Command{
@@ -31,7 +37,12 @@ var sendCmd = &cobra.Command{
 
 			switch c {
 			case "smtp":
-				if err := smtpSend(); err != nil {
+
+				emailq := []models.Email{
+					email,
+				}
+
+				if err := processSMTPQueue(emailq); err != nil {
 					return err
 				}
 				break
