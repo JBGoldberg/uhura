@@ -1,0 +1,2 @@
+# Default mode to process
+DEFAULT_MODE = smtp
