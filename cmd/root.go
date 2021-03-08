@@ -21,8 +21,8 @@ func Execute() error {
 func init() {
 
 	rootCmd.PersistentFlags().StringVar(&config.cfgFile, "config", "", "config file (default is $HOME/.uhura.yaml)")
-	rootCmd.PersistentFlags().String("license", "CC BY-SA", "returns the open source license")
 
+	rootCmd.PersistentFlags().String("license", "CC BY-SA", "returns the open source license")
 	rootCmd.PersistentFlags().String("codebase", "https://github.com/JBGoldberg/uhura", "returns the source codebase location")
 	rootCmd.PersistentFlags().String("author", "Jim Bruno Goldberg <jbgoldberg@nekutima.eu>", "returns the author data")
 

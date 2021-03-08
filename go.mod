@@ -3,6 +3,7 @@ module github.com/JBGoldberg/uhura
 go 1.14
 
 require (
+	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.8.0
 	github.com/spf13/cobra v1.1.3

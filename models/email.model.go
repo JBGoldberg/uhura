@@ -7,7 +7,7 @@ type Email struct {
 	Sender string
 	From   string
 
-	To  []string
+	To  string
 	Cc  []string
 	Bcc []string
 

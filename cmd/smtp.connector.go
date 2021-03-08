@@ -7,13 +7,24 @@ import (
 	"net/smtp"
 
 	"github.com/JBGoldberg/uhura/models"
+	"github.com/gofrs/uuid"
 	log "github.com/sirupsen/logrus"
 )
 
-func sendSMTP(email models.Email) error {
+func sendSMTP(_email models.Email) error {
 	log.Printf("Sending message using SMTP server @ %s:%d", config.smtp.serverHost, config.smtp.serverPort)
 
-	log.Printf("Sending message %s from %s, about %s", email.ID, email.From, email.Subject)
+	if len(_email.ID) == 0 {
+
+		id, err := uuid.NewV4()
+		if err != nil {
+			return err
+		}
+
+		_email.ID = id.String()
+
+	}
+	log.Printf("Sending message %s from %s, about %s", _email.ID, _email.From, _email.Subject)
 
 	// conn, err := net.Dial("tcp", "workcluster.nekutima.eu:25")
 	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", config.smtp.serverHost, config.smtp.serverPort))
@@ -39,12 +50,22 @@ func sendSMTP(email models.Email) error {
 		}
 	}
 
-	if err = c.Mail(email.From); err != nil {
+	if err = c.Mail(_email.From); err != nil {
 		return err
 	}
 
-	for _, addr := range email.To {
-		if err = c.Rcpt(addr); err != nil {
+	if err = c.Rcpt(_email.To); err != nil {
+		return err
+	}
+
+	for _, bcc := range _email.Bcc {
+		if err = c.Rcpt(bcc); err != nil {
+			return err
+		}
+	}
+
+	for _, cc := range _email.Cc {
+		if err = c.Rcpt(cc); err != nil {
 			return err
 		}
 	}
@@ -54,12 +75,23 @@ func sendSMTP(email models.Email) error {
 		return err
 	}
 
-	_, err = w.Write([]byte("To: jimbrunogoldberg@gmail.com\r\n" +
-		"From: uhura@nekutima.eu\r\n" +
-		"Subject: Test Email From Uhura\r\n" +
-		"\r\n" +
-		"This is some content to reach a user...\r\n"))
-	if err != nil {
+	var body string
+	body += fmt.Sprintf("To: %s\r\n", _email.To)
+	body += fmt.Sprintf("From: %s\r\n", _email.From)
+	body += fmt.Sprintf("Subject: %s\r\n", _email.Subject)
+	body += fmt.Sprintf("Uhura-ID: %s\r\n", _email.ID)
+
+	for _, bcc := range _email.Bcc {
+		body += fmt.Sprintf("Bcc: %s\r\n", bcc)
+	}
+
+	for _, cc := range _email.Cc {
+		body += fmt.Sprintf("Cc: %s\r\n", cc)
+	}
+
+	body += fmt.Sprintf("\r\n%s\r\n", _email.Message)
+
+	if _, err = w.Write([]byte(body)); err != nil {
 		return err
 	}
 

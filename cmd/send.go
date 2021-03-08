@@ -3,27 +3,12 @@ package cmd
 import (
 	"errors"
 
-	"github.com/JBGoldberg/uhura/models"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 func init() {
 	rootCmd.AddCommand(sendCmd)
-}
-
-var email = models.Email{
-	ID:   "teste-1234",
-	From: "uhura@nekutima.eu",
-	To:   "jimbrunogoldberg@gmail.com",
-	Cc: []string{
-		"jim@bycoders.co",
-	},
-	Bcc: []string{
-		"jbgoldberg@nekutima.eu",
-	},
-	Subject: "Test Email From Uhura",
-	Message: "This is a message file from Uhura!",
 }
 
 var sendCmd = &cobra.Command{
@@ -38,14 +23,9 @@ var sendCmd = &cobra.Command{
 
 			switch c {
 			case "smtp":
-
-				emailq := []models.Email{
-					email,
-				}
-
-				if err := processSMTPQueue(emailq); err != nil {
-					return err
-				}
+				// if err := processSMTPQueue(); err != nil {
+				// 	return err
+				// }
 				break
 
 			case "telegram":
