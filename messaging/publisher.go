@@ -7,7 +7,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill-amqp/pkg/amqp"
 )
 
-// Connect to AMQP server to publish on queues
+// NewPublisher connects to AMQP server to publish on queues
 func NewPublisher(amqpConnectString string) (*amqp.Publisher, error) {
 
 	log.Infof("Retreiving publisher from %s", removePassword(amqpConnectString))

@@ -2,10 +2,14 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 
+	"github.com/JBGoldberg/uhura/smtp"
+
 	"github.com/JBGoldberg/uhura/messaging"
+	"github.com/JBGoldberg/uhura/models"
 	"github.com/ThreeDotsLabs/watermill/message"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -17,8 +21,8 @@ func init() {
 
 var sendCmd = &cobra.Command{
 	Use:   "send smtp|telegram",
-	Short: "Send messages on queue",
-	Long:  `Reads the messages queue to be send and process it.`,
+	Short: "Start process(es) to send messages",
+	Long:  `Start the processes that wait for messages in queues and send them using the respective protocols.`,
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		log.Println("Sending messages")
@@ -61,23 +65,44 @@ func checkSMTPQueue() error {
 	if err != nil {
 		return err
 	}
-	log.Info("Subscripted", subscriber)
 
 	SMTPQeue, err := subscriber.Subscribe(context.Background(), config.ampq.queues.smtp)
 	if err != nil {
 		return err
 	}
-	log.Info("Emails", SMTPQeue)
 
-	// go svc.process(email_requests)
-	return nil
+	return processSMTPQueue(SMTPQeue)
 }
 
-func processSMTPQueue(messages <-chan *message.Message) {
-	for msg := range messages {
-		log.Printf("received message: %s, payload: %s", msg.UUID, string(msg.Payload))
-		msg.Nack()
+func processSMTPQueue(messages <-chan *message.Message) error {
+
+	emailServer, err := smtp.NewServer(config.smtp.serverHost, config.smtp.serverPort, config.smtp.clientHost)
+	if err != nil {
+		log.Error("Unable to connect to SMTP server")
+		return err
 	}
+
+	for msg := range messages {
+
+		var email models.Email
+		err := json.Unmarshal([]byte(msg.Payload), &email)
+		if err != nil {
+			log.Error("Unable to deJSON message", err, msg.UUID)
+			msg.Reject()
+			continue
+		}
+
+		if err := emailServer.SendSMTP(email); err != nil {
+			log.Error("Unable to send via smtp email", err, email.ID)
+			msg.Nack()
+			continue
+		}
+
+		log.Printf("SMTP email sent as requested by: %s", msg.UUID)
+		msg.Ack()
+	}
+
+	return nil
 }
 
 // func processSMTPQueue(emails []models.Email) error {

@@ -43,7 +43,6 @@ func (server SMTPServer) SendSMTP(_email models.Email) error {
 		}
 
 		_email.ID = id.String()
-
 	}
 	log.Printf("Sending message %s from %s, about %s", _email.ID, _email.From, _email.Subject)
 

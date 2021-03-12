@@ -9,7 +9,7 @@ import (
 
 type configSMTP struct {
 	serverHost string
-	serverPort int
+	serverPort uint
 	clientHost string
 }
 
@@ -77,7 +77,7 @@ func initConfig() {
 		config.smtp.clientHost = viper.GetString("smtp.client-host")
 
 		config.smtp.serverHost = viper.GetString("smtp.server-host")
-		config.smtp.serverPort = viper.GetInt("smtp.server-port")
+		config.smtp.serverPort = viper.GetUint("smtp.server-port")
 
 		config.ampq.username = viper.GetString("ampq.username")
 		config.ampq.password = viper.GetString("ampq.password")
