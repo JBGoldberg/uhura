@@ -1,0 +1,19 @@
+
+# Server for send emails via SMTP
+smtp:
+  # SMTP Server Hostname and Service Port
+  server-host: smtp.somewhere.com
+  server-port: 25
+
+  # Canonical client hostname for HELO phase
+  client-host: thispc.somewhere.com
+
+ampq:
+  username: tonnystark
+  password: pepperssmell
+  server-host: ampq.somewhere.com
+  server-port: 5672
+  server-admin-port: 15672  
+  queue:
+    smtp: email-send-test
+    telegram: telegram-send-test  

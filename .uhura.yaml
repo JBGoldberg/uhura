@@ -1,0 +1,17 @@
+# Default mode to process
+DEFAULT_MODE: smtp
+
+smtp:
+  server-host: workcluster.nekutima.eu
+  server-port: 25
+  client-host: ip5f5bf741.dynamic.kabel-deutschland.de
+
+ampq:
+  username: core_user
+  password: dMgio1rIwc1e
+  server-host: workcluster.nekutima.eu
+  server-port: 5672
+  server-admin-port: 15672
+  queue:
+    smtp: email-send-test
+    telegram: telegram-send-test
