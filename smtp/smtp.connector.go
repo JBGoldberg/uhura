@@ -1,4 +1,4 @@
-package cmd
+package smtp
 
 import (
 	"crypto/tls"
@@ -11,8 +11,29 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func sendSMTP(_email models.Email) error {
-	log.Printf("Sending message using SMTP server @ %s:%d", config.smtp.serverHost, config.smtp.serverPort)
+// SMTPServer represents SMTP server configurarion
+type SMTPServer struct {
+	host   string
+	port   uint
+	client string
+}
+
+// NewServer creates SMTP server configurarion
+func NewServer(serverHost string, serverPort uint, clientHost string) (SMTPServer, error) {
+
+	server := SMTPServer{
+		host:   serverHost,
+		port:   serverPort,
+		client: clientHost,
+	}
+
+	// TODO Check if server is available
+	return server, nil
+}
+
+// SendSMTP sends a SMTP message
+func (server SMTPServer) SendSMTP(_email models.Email) error {
+	// log.Printf("Sending message using SMTP server @ %s:%d", config.smtp.serverHost, config.smtp.serverPort)
 
 	if len(_email.ID) == 0 {
 
@@ -27,24 +48,24 @@ func sendSMTP(_email models.Email) error {
 	log.Printf("Sending message %s from %s, about %s", _email.ID, _email.From, _email.Subject)
 
 	// conn, err := net.Dial("tcp", "workcluster.nekutima.eu:25")
-	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", config.smtp.serverHost, config.smtp.serverPort))
+	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", server.host, server.port))
 	if err != nil {
 		return err
 	}
 
 	// c, err := smtp.NewClient(conn, "ip5f5bf741.dynamic.kabel-deutschland.de")
-	c, err := smtp.NewClient(conn, config.smtp.clientHost)
+	c, err := smtp.NewClient(conn, server.client)
 	if err != nil {
 		return err
 	}
 	defer c.Close()
 
-	if err = c.Hello(config.smtp.clientHost); err != nil {
+	if err = c.Hello(server.host); err != nil {
 		return err
 	}
 
 	if ok, _ := c.Extension("STARTTLS"); ok {
-		config := &tls.Config{ServerName: config.smtp.serverHost}
+		config := &tls.Config{ServerName: server.host}
 		if err = c.StartTLS(config); err != nil {
 			return err
 		}

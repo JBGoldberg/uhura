@@ -1,11 +1,18 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 
+	"github.com/JBGoldberg/uhura/messaging"
 	"github.com/JBGoldberg/uhura/models"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"fmt"
+
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/message"
 )
 
 func init() {
@@ -42,7 +49,6 @@ var requestCmd = &cobra.Command{
 
 			switch c {
 			case "smtp":
-
 				if err := requestSMTPQueue(emailr); err != nil {
 					return err
 				}
@@ -59,15 +65,39 @@ var requestCmd = &cobra.Command{
 			}
 
 		}
-
 		return nil
-
 	},
 }
 
 func requestSMTPQueue(_email models.Email) error {
 
-	sendSMTP(_email)
+	server := fmt.Sprintf(
+		"amqp://%s:%s@%s:%d",
+		config.ampq.username,
+		config.ampq.password,
+		config.ampq.serverHost,
+		config.ampq.serverPort)
+
+	publisher, err := messaging.NewPublisher(server)
+	if err != nil {
+		log.Error("Unable to get publisher")
+		return err
+	}
+
+	json, err := json.Marshal(emailr)
+	if err != nil {
+		log.Error("Unable to JSONed Email")
+		return err
+	}
+
+	msg := message.NewMessage(watermill.NewUUID(), []byte(json))
+
+	err = publisher.Publish(config.ampq.queues.smtp, msg)
+	if err != nil {
+		log.Error("Unable queue message")
+		return err
+	}
+
 	return nil
 
 }
