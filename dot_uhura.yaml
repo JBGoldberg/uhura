@@ -1,4 +1,12 @@
+database:
+  folder: ~/gdg/uhura
 
+sources:
+  - { name: Escriba Café, URL: https://www.spreaker.com/show/1652479/episodes/feed, mode: history } 
+  - { name: Night Vale, URL: http://feeds.nightvalepresents.com/welcometonightvalepodcast, mode: history } 
+  - { name: Café Brasil, URL: https://www.omnycontent.com/d/playlist/0009b167-0e82-414e-91eb-aae8011fc66d/bb475f9e-82b0-4368-9ff0-abe7011ec595/d8a23899-4d0d-4444-a539-abe7011ec5a3/podcast.rss, mode: insight } 
+  - { name: Berich aus Berlin, URL: https://www.tagesschau.de/export/podcast/bab/, mode: news }                 
+  
 # Server for send emails via SMTP
 smtp:
   # SMTP Server Hostname and Service Port
@@ -16,4 +24,4 @@ ampq:
   server-admin-port: 15672  
   queue:
     smtp: email-send-test
-    telegram: telegram-send-test  
+    telegram: telegram-send-test 
