@@ -1,0 +1,8 @@
+mutation UpdateRss ($id: UUID!, $name: String!, $description: String!) {
+  updateRss(input: {patch: {name: $name, description: $description}, id: $id}) {
+    rss {
+      name
+      description
+    }
+  }
+}

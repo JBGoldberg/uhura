@@ -1,0 +1,10 @@
+query Rsses {
+  rsses {
+    nodes {
+      id
+      name
+      url
+      mode
+    }
+  }
+}
